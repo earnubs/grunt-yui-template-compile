@@ -1,0 +1,8 @@
+<script id="global-nav" type="x-template">
+<div class='u-nav-global'><div class='u-nav-global-nav'><ul>
+<% Y.Array.each(data.links, function (item, index) { %>
+<li><a <% if (item.active) { %>class='u-nav-global-active'<% } %> href="http://<%= item.url %>"><%= item.title %></a></li>
+<% if (data.length && ( index === data.length )) { %><li class="u-nav-global-more"><a href="#more">More<i>›</i></a><ul><% } %>
+<% }); %>
+</ul></ul></div></div>
+</script>
