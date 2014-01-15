@@ -33,19 +33,11 @@ module.exports = function(grunt) {
       micro: {
           files: [{
               expand: true,
-              src: ['test/fixtures/*.micro.html'],
+              src: 'test/fixtures/*.{micro,hbs}.html',
               dest: 'tmp/',
               flatten: true,
               ext: '.js'
-      }]
-      //  files: [{
-      //      expand: true,
-      //      src: 'test/fixtures/tmpl/**/*',
-      //      ext: '.js',
-      //      rename: function(dest, src) {
-      //          return src.replace(/\/tmpl\//, '/js/');
-      //      }
-      //  }],
+          }]
       }
     },
 

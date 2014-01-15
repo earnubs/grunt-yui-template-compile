@@ -12,9 +12,7 @@ var path = require('path'),
     vow = require('vow'),
     htmlparser = require('htmlparser2'),
     Handlebars  = require('yui/handlebars').Handlebars,
-    Micro = require('yui/template-micro').Template.Micro,
-
-    FILE_EXTS = ['.hbs', '.mu', '.micro', '.handlebars'];
+    Micro = require('yui/template-micro').Template.Micro;
 
     function getExtension(filename) {
         var ext = (filename[0]||'').split('.');
@@ -100,8 +98,6 @@ module.exports = function(grunt) {
 
     grunt.registerMultiTask('yui_template', 'Precompile Y.Template files.', function() {
 
-        //var done = this.async();
-
         this.files.forEach(function(f) {
 
             var src = f.src;
@@ -118,9 +114,5 @@ module.exports = function(grunt) {
             });
 
         });
-
-        //done();
-
     });
-
 };
