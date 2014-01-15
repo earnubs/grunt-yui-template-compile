@@ -30,22 +30,23 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     yui_template: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!',
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
-      },
+      micro: {
+          files: [{
+              expand: true,
+              src: ['test/fixtures/*.micro.html'],
+              dest: 'tmp/',
+              flatten: true,
+              ext: '.js'
+      }]
+      //  files: [{
+      //      expand: true,
+      //      src: 'test/fixtures/tmpl/**/*',
+      //      ext: '.js',
+      //      rename: function(dest, src) {
+      //          return src.replace(/\/tmpl\//, '/js/');
+      //      }
+      //  }],
+      }
     },
 
     // Unit tests.

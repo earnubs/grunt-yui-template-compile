@@ -31,7 +31,12 @@
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt": "~0.4.2"
+    "grunt": "~0.4.2",
+    "htmlparser": "~1.7.7",
+    "yui": "~3.14.1",
+    "htmlparser2": "~3.4.0",
+    "promise": "~3.2.0",
+    "vow": "~0.4.1"
   },
   "peerDependencies": {
     "grunt": "~0.4.2"

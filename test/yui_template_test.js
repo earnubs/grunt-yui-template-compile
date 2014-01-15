@@ -27,6 +27,15 @@ exports.yui_template = {
     // setup here if necessary
     done();
   },
+  micro: function(test) {
+      test.expect(1);
+      var expected = grunt.file.read('test/expected/foo.js');
+      var actual = grunt.file.read('tmp/foo.js');
+      test.equal(actual, expected, 'should match expected output.');
+
+      test.done();
+  }
+  /**
   default_options: function(test) {
     test.expect(1);
 
@@ -45,4 +54,5 @@ exports.yui_template = {
 
     test.done();
   },
+ **/
 };
