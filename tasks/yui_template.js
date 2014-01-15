@@ -98,6 +98,8 @@ module.exports = function(grunt) {
 
     grunt.registerMultiTask('yui_template', 'Precompile Y.Template files.', function() {
 
+        var done = this.async();
+
         this.files.forEach(function(f) {
 
             var src = f.src;
@@ -114,5 +116,7 @@ module.exports = function(grunt) {
             });
 
         });
+
+        done();
     });
 };
