@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/paazmaya/grunt-togeojson.png?branch=master)](https://travis-ci.org/paazmaya/grunt-togeojson)
+[![Build Status](https://travis-ci.org/earnubs/grunt-yui-template-compile.png?branch=master)](https://travis-ci.org/earnubs/grunt-yui-template-compile)
 
 # grunt-yui-template
 
