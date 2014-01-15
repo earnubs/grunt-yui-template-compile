@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/paazmaya/grunt-togeojson.png?branch=master)](https://travis-ci.org/paazmaya/grunt-togeojson)
+
 # grunt-yui-template
 
 > Precompile Y.Template files.
