@@ -53,39 +53,47 @@ var path = require('path'),
      * @param {String} type Y.Template.Micro or Y.Template.Handlebars
      */
     function parsedFileDomHandler( dom, type ) {
-        var i, l, node, html, namespace,
+        var i = 0, l = dom.length, node, html, namespace,
 
         output = '';
 
-        for (i = 0, l = dom.length; i < l; i++ ) {
-            node = dom[i];
-            if ( node.type === 'script' ) {
-                if (
-                    ( node.attribs.type === 'x-template' ||
-                     node.attribs.type === 'text/x-handlebars-template' ) &&
-                         node.children && node.children[0].type === 'text'
-                ) {
-                    html = node.children[0].data;
-                    namespace = node.attribs.id;
+        if (l) {
 
-                    output += 'var engine, tmpl = ';
+            for (; i < l; i++ ) {
+                node = dom[i];
+                if ( node.type === 'script' ) {
+                    if (
+                        ( node.attribs.type === 'x-template' ||
+                         node.attribs.type === 'text/x-handlebars-template' ) &&
+                             node.children && node.children[0].type === 'text'
+                    ) {
+                        html = node.children[0].data;
+                        namespace = node.attribs.id;
 
-                    if (type && (type === 'hbs' || type === 'handlebars')) {
-                        output += Handlebars.precompile(html) + ';\n';
-                        output += 'engine = Y.Template.Handlebars;';
+                        output += 'var engine, tmpl = ';
+
+                        if (type && (type === 'hbs' || type === 'handlebars')) {
+                            console.log('Precompiling Y.Handlebars type template...');
+                            output += Handlebars.precompile(html) + ';\n';
+                            output += 'engine = Y.Template.Handlebars;';
+                        }
+
+                        if (type && (type === 'mu' || type === 'micro')) {
+                            console.log('Precompiling Y.Template.Micro type template...');
+                            output += Micro.precompile(html) + ';\n';
+                            output += 'engine = Y.Template.Micro;';
+                        }
+
+                        output += '\nY.Template.register("'+namespace+'", engine.revive(tmpl));\n\n';
+
+                    } else {
+                        console.warn('<script> element empty or has irrelevant type attribute, skipping');
                     }
-
-                    if (type && (type === 'mu' || type === 'micro')) {
-                        output += Micro.precompile(html) + ';\n';
-                        output += 'engine = Y.Template.Micro;';
-                    }
-
-                    output += '\nY.Template.register("'+namespace+'", engine.revive(tmpl));\n\n';
-
-                } else {
-                    console.warn('<script> element empty or has irrelevant type attribute, skipping');
                 }
             }
+
+        } else {
+            console.warn("Empty DOM object, nothing to do.");
         }
 
         return output += '\n\n';
@@ -95,7 +103,11 @@ module.exports = function(grunt) {
 
     grunt.registerMultiTask('yui_template', 'Precompile Y.Template files.', function() {
 
-        if (!this.files.length) {
+        var len = this.files.length;
+
+        if (len) {
+            grunt.log.writeln('Number of templates to compile: ' + len);
+        } else {
             grunt.log.error('No templates found to compile...');
         }
 
@@ -103,6 +115,7 @@ module.exports = function(grunt) {
 
             var src = f.src;
             var dest = f.dest;
+
 
             parseHTML(src, grunt.file.read(src)).
                 then(function(result) {
