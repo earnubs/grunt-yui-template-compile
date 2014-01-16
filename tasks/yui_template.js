@@ -95,8 +95,6 @@ module.exports = function(grunt) {
 
     grunt.registerMultiTask('yui_template', 'Precompile Y.Template files.', function() {
 
-        var done = this.async();
-
         if (!this.files.length) {
             grunt.log.error('No templates found to compile...');
         }
@@ -117,7 +115,5 @@ module.exports = function(grunt) {
             });
 
         });
-
-        done();
     });
 };
