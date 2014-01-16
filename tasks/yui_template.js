@@ -9,7 +9,7 @@
 'use strict';
 
 var path = require('path'),
-    vow = require('vow'),
+    Q = require('q'),
     htmlparser = require('htmlparser2'),
     Handlebars  = require('yui/handlebars').Handlebars,
     Micro = require('yui/template-micro').Template.Micro;
@@ -26,25 +26,23 @@ var path = require('path'),
      **/
     function parseHTML(filepath, html, callback) {
 
-        var promise = new vow.Promise(function(resolve, reject, notify) {
-            var handler = new htmlparser.DomHandler(function(err, dom) {
+        var deferred = Q.defer();
+        var handler = new htmlparser.DomHandler(function(err, dom) {
 
-                if (err) {
-                    reject(err);
-                }
+            if (err) {
+                deferred.reject(err);
+            }
 
-                var ext = getExtension(filepath);
-                resolve(parsedFileDomHandler(dom, ext));
-
-            });
-
-            var parser = new htmlparser.Parser(handler);
-
-            parser.parseComplete(html);
+            var ext = getExtension(filepath);
+            deferred.resolve(parsedFileDomHandler(dom, ext));
 
         });
 
-        return promise;
+        var parser = new htmlparser.Parser(handler);
+
+        parser.parseComplete(html);
+
+        return deferred.promise;
     }
 
     /**
@@ -117,8 +115,8 @@ module.exports = function(grunt) {
             var dest = f.dest;
 
 
-            parseHTML(src, grunt.file.read(src)).
-                then(function(result) {
+            parseHTML(src, grunt.file.read(src))
+            .then(function(result) {
 
                 grunt.log.oklns(dest + ' precompiled OK!');
                 grunt.file.write(dest, result);
