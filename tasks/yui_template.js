@@ -50,7 +50,7 @@ var path = require('path'),
      * @param {Object} dom
      * @param {String} type Y.Template.Micro or Y.Template.Handlebars
      */
-    function parsedFileDomHandler( dom, type ) {
+    function parsedFileDomHandler( dom ) {
         var i = 0, l = dom.length, node, html, namespace,
 
         output = '';
@@ -70,22 +70,20 @@ var path = require('path'),
 
                         output += 'var engine, tmpl = ';
 
-                        if (type && (type === 'hbs' || type === 'handlebars')) {
-                            console.log('Precompiling Y.Handlebars type template...');
+                        if ( node.attribs.type === 'text/x-handlebars-template' ) {
                             output += Handlebars.precompile(html) + ';\n';
-                            output += 'engine = Y.Template.Handlebars;';
+                            output += 'engine = new Y.Template(Y.Handlebars);';
                         }
 
-                        if (type && (type === 'mu' || type === 'micro')) {
-                            console.log('Precompiling Y.Template.Micro type template...');
+                        if ( node.attribs.type === 'x-template' ) {
                             output += Micro.precompile(html) + ';\n';
-                            output += 'engine = Y.Template.Micro;';
+                            output += 'engine = new Y.Template();';
                         }
 
                         output += '\nY.Template.register("'+namespace+'", engine.revive(tmpl));\n\n';
 
                     } else {
-                        console.warn('<script> element empty or has irrelevant type attribute, skipping');
+                        console.warn('<script> element empty or has unknown type attribute, skipping');
                     }
                 }
             }
@@ -97,34 +95,41 @@ var path = require('path'),
         return output += '\n\n';
     }
 
+    // execute the func for each element in the array and collect the  results
+    function map (arr, iterator) {
+        var promises = arr.map(function (el) { return iterator(el) })
+        return Q.all(promises) // return the group promise
+    }
+
+
 module.exports = function(grunt) {
 
     grunt.registerMultiTask('yui_template', 'Precompile Y.Template files.', function() {
 
+        var done = this.async();
         var len = this.files.length;
 
-        if (len) {
-            grunt.log.writeln('Number of templates to compile: ' + len);
-        } else {
+        if (!len) {
             grunt.log.error('No templates found to compile...');
         }
 
-        this.files.forEach(function(f) {
+        map(this.files, function(f) {
+
 
             var src = f.src;
             var dest = f.dest;
 
-
             parseHTML(src, grunt.file.read(src))
             .then(function(result) {
 
-                grunt.log.oklns(dest + ' precompiled OK!');
+                grunt.log.ok(dest + ' precompiled');
                 grunt.file.write(dest, result);
 
             }, function(err) {
                 grunt.log.error(err);
             });
 
-        });
+        })
+        .then( done, grunt.log.error );
     });
 };

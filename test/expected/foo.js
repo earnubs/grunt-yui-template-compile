@@ -18,7 +18,7 @@ $t+='\n';
 $t+='\n</ul></ul></div></div>\n';
 return $t;
 };
-engine = Y.Template.Micro;
+engine = new Y.Template();
 Y.Template.register("global-nav", engine.revive(tmpl));
 
 
