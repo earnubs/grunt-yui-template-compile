@@ -1,7 +1,7 @@
 {
   "name": "grunt-yui-template-compile",
   "description": "Precompile Y.Template files.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/earnubs/grunt-yui-template-compile",
   "author": {
     "name": "Stephen Stewart",
