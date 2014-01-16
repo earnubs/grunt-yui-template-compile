@@ -44,9 +44,7 @@ var path = require('path'),
 
         });
 
-
         return promise;
-
     }
 
     /**
@@ -65,8 +63,7 @@ var path = require('path'),
                 if (
                     ( node.attribs.type === 'x-template' ||
                      node.attribs.type === 'text/x-handlebars-template' ) &&
-                         node.children &&
-                             node.children[0].type === 'text'
+                         node.children && node.children[0].type === 'text'
                 ) {
                     html = node.children[0].data;
                     namespace = node.attribs.id;
@@ -86,7 +83,7 @@ var path = require('path'),
                     output += '\nY.Template.register("'+namespace+'", engine.revive(tmpl));\n\n';
 
                 } else {
-                    console.log('<script> element empty or has irrelevant type attribute, skipping');
+                    console.warn('<script> element empty or has irrelevant type attribute, skipping');
                 }
             }
         }
@@ -99,6 +96,10 @@ module.exports = function(grunt) {
     grunt.registerMultiTask('yui_template', 'Precompile Y.Template files.', function() {
 
         var done = this.async();
+
+        if (!this.files.length) {
+            grunt.log.error('No templates found to compile...');
+        }
 
         this.files.forEach(function(f) {
 
