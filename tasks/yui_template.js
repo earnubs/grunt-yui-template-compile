@@ -71,11 +71,13 @@ var path = require('path'),
                         output += 'var engine, tmpl = ';
 
                         if ( node.attribs.type === 'text/x-handlebars-template' ) {
+                            console.log('Precompiling \'' + node.attribs.id + ', a Y.Handlebars type template...');
                             output += Handlebars.precompile(html) + ';\n';
                             output += 'engine = new Y.Template(Y.Handlebars);';
                         }
 
                         if ( node.attribs.type === 'x-template' ) {
+                            console.log('Precompiling \'' + node.attribs.id + ', a Y.Template.Micro type template...');
                             output += Micro.precompile(html) + ';\n';
                             output += 'engine = new Y.Template();';
                         }
@@ -109,20 +111,22 @@ module.exports = function(grunt) {
         var done = this.async();
         var len = this.files.length;
 
-        if (!len) {
+        if (len) {
+            grunt.log.writeln('Number of files with templates to compile: ' + len);
+        } else {
             grunt.log.error('No templates found to compile...');
         }
 
         map(this.files, function(f) {
 
-
             var src = f.src;
             var dest = f.dest;
+
 
             parseHTML(src, grunt.file.read(src))
             .then(function(result) {
 
-                grunt.log.ok(dest + ' precompiled');
+                grunt.log.oklns(dest + ' precompiled OK!');
                 grunt.file.write(dest, result);
 
             }, function(err) {
