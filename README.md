@@ -38,7 +38,7 @@ grunt.initConfig({
             ext: '.js'
         }]
     },
-  },
+  }
 });
 ```
 
@@ -52,15 +52,11 @@ We store templates as .html files in js/templates, this grunt task simply precom
 grunt.initConfig({
   yui_template: {
     files: [{
-      expand: true,
-      src: 'src/**/*.{micro,hbs}.html',
-      ext: '.js',
-      rename: function(dest, src) {
-        // compile from moduleFoo/tmpl to moduleFoo/js
-        return src.replace(/\/tmpl\//, '/js/');
-      }
+        expand: true,
+        src: 'src/**/js/templates/*.html',
+        ext: '.js'
     }]
-  },
+  }
 });
 ```
 
