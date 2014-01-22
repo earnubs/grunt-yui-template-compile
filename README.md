@@ -34,12 +34,8 @@ grunt.initConfig({
       // Target-specific file lists and/or options go here.
         files: [{
             expand: true,
-            src: 'src/**/*.{micro,hbs}.html',
-            ext: '.js',
-            rename: function(dest, src) {
-                // compile from moduleFoo/tmpl to moduleFoo/js
-                return src.replace(/\/tmpl\//, '/js/');
-            }
+            src: 'src/**/js/templates/*.html',
+            ext: '.js'
         }]
     },
   },
@@ -49,8 +45,8 @@ grunt.initConfig({
 ### Usage Examples
 
 #### YUI like module directory structure
-Templates are stored in a tmpl/ folder within the module and built to js/, where
-they can be picked up by shifter and wrapped up as modules.
+
+We store templates as .html files in js/templates, this grunt task simply precompiles them to .js files of the same name, it's the .js file which is referenced in build.json for Shifter to pick up and wrap as a module.
 
 ```js
 grunt.initConfig({
